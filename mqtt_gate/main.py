@@ -14,9 +14,11 @@ def update_state(value, topic):
     client.publish(topic, value, retain=True)
 
 # The callback for when the client receives a CONNACK response from the server.
-def on_connect(client, userdata, rc):
+def on_connect(client, userdata, flags, rc):
     print ("Connected with result code: %s" % mqtt.connack_string(rc))
     for config in CONFIG['doors']:
+        availability_topic = config['availability_topic']
+        client.publish(availability_topic, "online", retain=False)
         command_topic = config['command_topic']
         print ("Listening for commands on %s" % command_topic)
         client.subscribe(command_topic)
@@ -27,7 +29,7 @@ def execute_command(door, command):
         doorName = door.name
     except:
         doorName = door.id
-    print "Executing command %s for door %s" % (command, doorName)
+    print ("Executing command %s for door %s" % (command, doorName))
     if command == "OPEN" and door.state == 'closed':
         door.open()
     elif command == "CLOSE" and door.state == 'open':
@@ -35,7 +37,7 @@ def execute_command(door, command):
     elif command == "STOP":
         door.stop()
     else:
-        print "Invalid command: %s" % command
+        print ("Invalid command: %s" % command)
 
 with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'config.yaml'), 'r') as ymlfile:
     CONFIG = yaml.load(ymlfile)
@@ -51,7 +53,7 @@ if 'discovery_prefix' not in CONFIG['mqtt']:
 else:
     discovery_prefix = CONFIG['mqtt']['discovery_prefix']
 
-client = mqtt.Client(client_id="MQTTGarageDoor_" + binascii.b2a_hex(os.urandom(6)), clean_session=True, userdata=None, protocol=4)
+client = mqtt.Client(client_id="MQTTGarageDoor_" + binascii.hexlify(os.urandom(32)).decode(), clean_session=True, userdata=None, protocol=4)
 
 client.on_connect = on_connect
 
@@ -85,7 +87,9 @@ if __name__ == "__main__":
 
         # Callback per door that passes a reference to the door
         def on_message(client, userdata, msg, door=door):
-            execute_command(door, str(msg.payload))
+            message = str(msg.payload.decode("utf-8"))
+            print ("Receiving message %s" % message)
+            execute_command(door, message)
 
         # Callback per door that passes the doors state topic
         def on_state_change(value, topic=state_topic):
