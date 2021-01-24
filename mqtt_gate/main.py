@@ -40,7 +40,7 @@ def execute_command(door, command):
         print ("Invalid command: %s" % command)
 
 with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'config.yaml'), 'r') as ymlfile:
-    CONFIG = yaml.load(ymlfile)
+    CONFIG = yaml.load(ymlfile,Loader=yaml.FullLoader)
 
 ### SETUP MQTT ###
 user = CONFIG['mqtt']['user']
@@ -71,7 +71,7 @@ if __name__ == "__main__":
             doorCfg['name'] = doorCfg['id']
 
         # Sanitize id value for mqtt
-        doorCfg['id'] = re.sub('\W+', '', re.sub('\s', ' ', doorCfg['id']))
+        doorCfg['id'] = re.sub('W+', '', re.sub('s', ' ', doorCfg['id']))
 
         if discovery is True:
             base_topic = discovery_prefix + "/cover/" + doorCfg['id']
