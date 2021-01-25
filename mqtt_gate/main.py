@@ -30,7 +30,9 @@ def execute_command(door, command):
     except:
         doorName = door.id
     print ("Executing command %s for door %s" % (command, doorName))
-    if command == "OPEN" and door.state == 'closed':
+    if command == "STEP" and door.state == 'closed':
+        door.step()
+    elif command == "OPEN" and door.state == 'closed':
         door.open()
     elif command == "CLOSE" and door.state == 'open':
         door.close()
