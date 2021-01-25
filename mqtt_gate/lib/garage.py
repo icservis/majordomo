@@ -20,6 +20,7 @@ class GarageDoor(object):
         self.relay_close_pin = config['relay_close']
         self.relay_step_pin = config['relay_step']
         self.state_pin = config['state']
+        self.button_pin = config['button']
         self.id = config['id']
         self.mode = int(config.get('state_mode') == 'normally_closed')
         self.invert_relay = bool(config.get('invert_relay'))
@@ -27,6 +28,7 @@ class GarageDoor(object):
         # Setup
         self._state = None
         self.onStateChange = EventHook()
+        self.onButtonChange = EventHook()
 
         # Set relay pin to output, state pin to input, and add a change listener to the state pin
         GPIO.setwarnings(False)
@@ -37,6 +39,8 @@ class GarageDoor(object):
         GPIO.setup(self.relay_step_pin, GPIO.OUT)
         GPIO.setup(self.state_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(self.state_pin, GPIO.BOTH, callback=self.__stateChanged, bouncetime=300)
+        GPIO.setup(self.button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.add_event_detect(self.button_pin, GPIO.BOTH, callback=self.__buttonChanged, bouncetime=300)
 
 
         # Set default relay state to false (off)
@@ -79,6 +83,14 @@ class GarageDoor(object):
         else:
             return 'open'
 
+    # Button is a read only property that actually gets its value from the pin
+    @property
+    def button(self):
+        # Read the mode from the config. Then compare the mode to the current state. IE. If the circuit is normally closed and the state is 1 then the circuit is closed.
+        # and vice versa for normally open
+        button = GPIO.input(self.button_pin)
+        return button
+
     # Mimick a button press by switching the GPIO pin on and off quickly
     def __press_stop(self):
         GPIO.output(self.relay_stop_pin, not self.invert_relay)
@@ -108,4 +120,10 @@ class GarageDoor(object):
             # after a statechange and then grab the state
             time.sleep(SHORT_WAIT)
             self.onStateChange.fire(self.state)
+
+
+    def __buttonChanged(self, channel):
+        if channel == self.button_pin:
+            time.sleep(SHORT_WAIT)
+            self.onButtonChange.fire(self.button)
 
