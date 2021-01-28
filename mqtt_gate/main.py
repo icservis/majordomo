@@ -102,10 +102,15 @@ if __name__ == "__main__":
         # You can add additional listeners here and they will all be executed when the door state changes
         door.onStateChange.addHandler(on_state_change)
 
-        def on_buttonchange(value):
-            print ("Button state %s" % value)
+        def on_buttonLongPress(value):
+            print ("Button long press delta: %s" % value)
+        door.onButtonLongPress.addHandler(on_buttonLongPress)
 
-        door.onButtonChange.addHandler(on_buttonchange)
+        def on_buttonShortPress(value):
+            print ("Button short press delta: %s" % value)
+        door.onButtonShortPress.addHandler(on_buttonShortPress)
+
+        
 
         # Publish initial door state
         client.publish(state_topic, door.state, retain=True)

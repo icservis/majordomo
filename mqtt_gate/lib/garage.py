@@ -25,10 +25,17 @@ class GarageDoor(object):
         self.mode = int(config.get('state_mode') == 'normally_closed')
         self.invert_relay = bool(config.get('invert_relay'))
 
-        # Setup
+        # State
         self._state = None
         self.onStateChange = EventHook()
-        self.onButtonChange = EventHook()
+        
+
+        # Button
+        self._time = 0
+        self._delta = 0
+        self._lastButtonState = 1
+        self.onButtonShortPress = EventHook()
+        self.onButtonLongPress = EventHook()
 
         # Set relay pin to output, state pin to input, and add a change listener to the state pin
         GPIO.setwarnings(False)
@@ -37,10 +44,12 @@ class GarageDoor(object):
         GPIO.setup(self.relay_open_pin, GPIO.OUT)
         GPIO.setup(self.relay_close_pin, GPIO.OUT)
         GPIO.setup(self.relay_step_pin, GPIO.OUT)
+
         GPIO.setup(self.state_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(self.state_pin, GPIO.BOTH, callback=self.__stateChanged, bouncetime=300)
+
         GPIO.setup(self.button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.add_event_detect(self.button_pin, GPIO.BOTH, callback=self.__buttonChanged, bouncetime=300)
+        GPIO.add_event_detect(self.button_pin, GPIO.BOTH, callback=self.__buttonChanged, bouncetime=100)
 
 
         # Set default relay state to false (off)
@@ -123,7 +132,22 @@ class GarageDoor(object):
 
 
     def __buttonChanged(self, channel):
-        if channel == self.button_pin:
-            time.sleep(SHORT_WAIT)
-            self.onButtonChange.fire(self.button)
+        if channel == self.button_pin:  
+            print ("Button: %s" % self.button)
+            print ("Last state: %s" % self._lastButtonState)
+            if self._lastButtonState != self.button:
+                if self.button == 0:
+                    self._time = time.time()
+                    self._delta = 0
+                else:
+                    self._delta = time.time() - self._time
+                    self._time = 0
+                    print ("Delta: %s" % self._delta)
 
+                    time.sleep(SHORT_WAIT)
+                    if self._delta > 0.500:
+                        self.onButtonLongPress.fire(self._delta)
+                    else:
+                        self.onButtonShortPress.fire(self._delta)
+                    
+                self._lastButtonState = self.button
