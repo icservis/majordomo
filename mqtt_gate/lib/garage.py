@@ -31,11 +31,7 @@ class GarageDoor(object):
         
 
         # Button
-        self._time = 0
-        self._delta = 0
-        self._lastButtonState = 1
-        self.onButtonShortPress = EventHook()
-        self.onButtonLongPress = EventHook()
+        self.onButtonPress = EventHook()
 
         # Set relay pin to output, state pin to input, and add a change listener to the state pin
         GPIO.setwarnings(False)
@@ -133,21 +129,5 @@ class GarageDoor(object):
 
     def __buttonChanged(self, channel):
         if channel == self.button_pin:  
-            print ("Button: %s" % self.button)
-            print ("Last state: %s" % self._lastButtonState)
-            if self._lastButtonState != self.button:
-                if self.button == 0:
-                    self._time = time.time()
-                    self._delta = 0
-                else:
-                    self._delta = time.time() - self._time
-                    self._time = 0
-                    print ("Delta: %s" % self._delta)
-
-                    time.sleep(SHORT_WAIT)
-                    if self._delta > 0.500:
-                        self.onButtonLongPress.fire(self._delta)
-                    else:
-                        self.onButtonShortPress.fire(self._delta)
+            self.onButtonPress.fire()
                     
-                self._lastButtonState = self.button

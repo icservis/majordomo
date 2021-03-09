@@ -6,8 +6,9 @@ After=network.target
 Type=simple
 Restart=always
 RestartSec=3
-User=%i
-ExecStart=/usr/bin/python -u /home/pi/Development/majordomo/mqtt_gate/main.py
+User=pi
+WorkingDirectory=/home/pi/Development/majordomo/mqtt_gate
+ExecStart=/usr/bin/python3 -u mqtt_gate/main.py > mqtt_gate.log 2>&1
 
 [Install]
 WantedBy=multi-user.target
