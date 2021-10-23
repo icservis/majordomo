@@ -8,7 +8,8 @@ This solution uses 4 hardware relays and independent reed switch, which indicate
 For future functonaly, software reserves independent BUTTON input for Door bel, but this is not currently implemented.
 
 Actualy, software solution uses only two relays - STEP RELAY and STOP RELAY. Check your documentation, how to control your controller with only two commands. 
-1. STEP should act as "inverter". When gate is opened, should start closing, when closed, shoud start opening. 2. STOP should immediately stops any action. Usualy acts as inverted contact.
+1. STEP should act as inverter. When gate is opened, should start closing, when closed, shoud start opening.
+2. STOP should immediately stops any action. Usualy acts as inverted contact.
 
 ## Hardware
 
@@ -47,6 +48,7 @@ The two rightmost white wires are for the collision detection sensors. So I remo
 * Raspberry Pi 3 or 4 running Rasbian jessie or later
 * Python 3.x
 * pip3 (python 3 pip)
+* Homeassistant with MQTT server
 
 ### Installation
 1. `git clone https://github.com/Jerrkawz/GarageQTPi.git` to `/home/pi/Development/majordomo` folder
@@ -62,14 +64,10 @@ HomeAssistant MQTT Setup: https://home-assistant.io/components/mqtt/
 
 Bruh Automation: https://www.youtube.com/watch?v=AsDHEDbyLfg
 
-## Home Assistant component setup
+## Homeassistant component setup
 Either follow the cover setup or enable mqtt discovery  
 HomeAssistant MQTT Cover: https://home-assistant.io/components/cover.mqtt/  
 HomeAssistant MQTT Discovery: https://home-assistant.io/docs/mqtt/discovery/
-
-Screenshot:
-
-![Home assistant ui][1]
 
 ## API Reference
 
