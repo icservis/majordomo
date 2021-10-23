@@ -27,7 +27,7 @@ Actualy, software solution uses only two relays - STEP RELAY and STOP RELAY. Che
 
 ## Wiring/Installation
 
-![alt text](Majordomo wiring.pdf)
+![alt text](Majordomo-wiring.pdf)
 
 Reed switch sould be wired directly beteween GPIO17 and GND.
 Possible button for door bell beteween GPIO27 and GND.
@@ -45,7 +45,7 @@ The two rightmost white wires are for the collision detection sensors. So I remo
 
 ### Prereqs 
 * Raspberry pi 3 or 4 running rasbian jessie
-* Python 2.7.x
+* Python 3.x
 * pip3 (python 3 pip)
 
 ### Installation
