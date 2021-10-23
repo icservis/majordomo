@@ -67,11 +67,11 @@ class GarageDoor(object):
 
     def open(self):
         if self.state == 'closed':
-            self.__press_open()
+            self.__press_step()
 
     def close(self):
         if self.state == 'open':
-            self.__press_close()
+            self.__press_step()
 
     def step(self):
         if self.state == 'closed':

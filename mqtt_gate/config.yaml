@@ -1,10 +1,11 @@
 mqtt:
     host: homeassistant.local
     port: 1883
+    server_status_topic: "homeassistant/status"
     user: homeassistant
     password: keLeT4oreilungadaeghieh8Eek3oot5gie1Rev2Doo3ieH1ied2La3laeh5Voph
-#    discovery: true #defaults to false, uncomment to enable home-assistant discovery
-#    discovery_prefix: homeassistant #change to match with setting of home-assistant
+#    discovery: true #defaults to false, uncomment to enable homeassistant discovery
+#    discovery_prefix: homeassistant #change to match with setting of homeassistant
 doors:
     -
         id: "gate"
@@ -17,7 +18,7 @@ doors:
         button: 27
 #        state_mode: normally_closed #defaults to normally open, uncomment to switch
         invert_relay: true #defaults to false, uncomment to turn relay pin on by default
-        state_topic: "home-assistant/gate/state"
-        command_topic: "home-assistant/gate/set"
-        availability_topic: "home-assistant/gate/availability"
+        state_topic: "homeassistant/gate/state"
+        command_topic: "homeassistant/gate/set"
+        availability_topic: "homeassistant/gate/availability"
 

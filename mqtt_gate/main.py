@@ -16,6 +16,8 @@ def update_state(value, topic):
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
     print ("Connected with result code: %s" % mqtt.connack_string(rc))
+    print ("Listening for server status on %s" % server_status_topic)
+    client.subscribe(server_status_topic)
     for config in CONFIG['doors']:
         availability_topic = config['availability_topic']
         client.publish(availability_topic, "online", retain=False)
@@ -45,6 +47,7 @@ with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'config.yaml'
     CONFIG = yaml.load(ymlfile,Loader=yaml.FullLoader)
 
 ### SETUP MQTT ###
+server_status_topic = CONFIG['mqtt']['server_status_topic']
 user = CONFIG['mqtt']['user']
 password = CONFIG['mqtt']['password']
 host = CONFIG['mqtt']['host']
@@ -98,6 +101,17 @@ if __name__ == "__main__":
             update_state(value, topic)
 
         client.message_callback_add(command_topic, on_message)
+
+        # Callback on status from server
+        def on_server_status_message(client, userdata, msg, door=door):
+            message = str(msg.payload.decode("utf-8"))
+            print ("Receiving status %s" % message)
+            for config in CONFIG['doors']:
+                availability_topic = config['availability_topic']
+                client.publish(availability_topic, "online", retain=False)
+            client.publish(state_topic, door.state, retain=True)
+
+        client.message_callback_add(server_status_topic, on_server_status_message)
 
         # You can add additional listeners here and they will all be executed when the door state changes
         door.onStateChange.addHandler(on_state_change)
