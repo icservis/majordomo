@@ -46,7 +46,7 @@ The two rightmost white wires are for the collision detection sensors. So I remo
 
 ### Prereqs 
 * Raspberry Pi 3 or 4 running Rasbian jessie or later
-* Python 3.x
+* Python 3.7.x
 * pip3 (python 3 pip)
 * Homeassistant with MQTT server
 
