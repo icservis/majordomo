@@ -3,13 +3,16 @@
 This project is inherited from popular [GarageQTPi project](https://github.com/Jerrkawz/GarageQTPi.git)
 
 ## Preface
-Majordomo solution is suggested as controller of typical outsige garden door with control unit, which offers open contacts for external controller for opening, stopping and closing gates. Some units offers even step mode, which opens gate for half.
-This solution uses 4 hardware relays and independent reed switch, which indicates status closed. You shoud have to instal independet realy switch, do no use built in from gate control unit, due to lost of warranty.
-For future functonaly, software reserves independent BUTTON input for Door bel, but this is not currently implemented.
+Majordomo is suggested as a controller of typical outside garden door with control unit, which offers open contacts for external controller performing opening, stopping and closing gate. Some units offer even step mode, which opens gate for half.
 
-Actualy, software solution uses only two relays - STEP RELAY and STOP RELAY. Check your documentation, how to control your controller with only two commands. 
-1. STEP should act as inverter. When gate is opened, should start closing, when closed, shoud start opening.
-2. STOP should immediately stops any action. Usualy acts as inverted contact.
+Majordomo uses 4 hardware relays and independent reed switch, which indicates the status of gate is closed. You should have to instal independent reed switch, do no use built-in one in gate control unit. Yould could lost the warranty.
+
+For future functionality, software reserves independent BUTTON input for Door Bell, but this feature is not currently implemented.
+
+Actually, software solution uses only two relays - **STEP RELAY** and **STOP RELAY**. 
+Check your documentation, how to control your controller with only two commands. 
+1. **STEP** should act as inverter. When gate is opened, should start closing, when closed, shoud start opening. Most of gate controllers have an external switch for manual gate controll - in this case connect relay parallel to this switch (NO).
+2. **STOP** should immediately stops any action. Usualy acts as reverse contact (NC).
 
 ## Hardware
 
@@ -30,22 +33,19 @@ Actualy, software solution uses only two relays - STEP RELAY and STOP RELAY. Che
 
 ![alt text](Majordomo-wiring.png)
 
-Reed switch sould be wired directly beteween GPIO17 and GND.
-Possible button for door bell beteween GPIO27 and GND.
+Reed switch should be wired directly beteween GPIO17 and GND.
+Optional button for door bell beteween GPIO27 and GND.
 
 ### Relay wiring
-**IMPORTANT: You shoud always consult with a user guide of control unit of gate before wiring relays**
+**IMPORTANT: You should always consult with a user guide of control unit of gate before wiring relays**
 
-Relays have two type of contacts - Normally Opened (NO) and Normaly Closed (NC). Be sure to wire correct type of output. relays of type OPEN, CLOSE and STEP should by typically NO, **STOP** would be typicaly NC.
-
-The basic idea is to wire it in parallel with the button on the wall.
-The code is essentially mimicking a button press by switching the relay on and off quickly. In my case the two leftmost wires (red/white) are connected to the button on the wall.
-The two rightmost white wires are for the collision detection sensors. So I removed the two leftmost wires, wirenutted 3 solid 14 gauge wires together (the button wire, my relay wire, and then one wire to go to the garage door opener) two times for each of the two wires.
+Relays have two type of contacts - Normally Opened (NO) and Normaly Closed (NC). Be sure to wire correct type of output. 
+Relays of type OPEN, CLOSE and STEP should by typically NO, **STOP** would be typicaly NC.
 
 ## Software
 
-### Prereqs 
-* Raspberry Pi 3 or 4 running Rasbian jessie or later
+### Prerequisities 
+* Raspberry Pi 3 or 4 running Rasbian Jessie or later
 * Python 3.7.x
 * pip3 (python 3 pip)
 * Homeassistant with MQTT server
@@ -55,7 +55,7 @@ The two rightmost white wires are for the collision detection sensors. So I remo
 2. `pip3 install -r requirements.txt`
 3. edit the `config.yaml` to set up mqtt (See below)
 3. run `nohup python3 /home/pi/Development/majordomo/mqtt_gate/main.py &` 
-5. Optionaly, add start script: copy and enable `majordomo.service` for `systemctl` daemon
+5. Optionaly, add start script: copy and enable `majordomo.service` for `systemd ` daemon via `Systemctl` command.
 
 ## MQTT setup
 I won't try to butcher an mqtt setup guide but will instead link you to some other resources:
