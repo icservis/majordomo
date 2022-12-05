@@ -3,7 +3,7 @@ mqtt:
     port: 1883
     server_status_topic: "homeassistant/status"
     user: homeassistant
-    password: keLeT4oreilungadaeghieh8Eek3oot5gie1Rev2Doo3ieH1ied2La3laeh5Voph
+    password: keLeT4oreilungadaeghieh8Eek3oot5
 #    discovery: true #defaults to false, uncomment to enable homeassistant discovery
 #    discovery_prefix: homeassistant #change to match with setting of homeassistant
 doors:
