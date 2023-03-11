@@ -16,7 +16,7 @@ doors:
         relay_step: 25
         state: 17
         button: 27
-#        state_mode: normally_closed #defaults to normally open, uncomment to switch
+        state_mode: 'closed' #defaults to normally open, uncomment to switch
         invert_relay: true #defaults to false, uncomment to turn relay pin on by default
         state_topic: "homeassistant/gate/state"
         command_topic: "homeassistant/gate/set"

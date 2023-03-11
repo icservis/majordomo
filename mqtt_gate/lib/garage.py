@@ -83,7 +83,7 @@ class GarageDoor(object):
         # Read the mode from the config. Then compare the mode to the current state. IE. If the circuit is normally closed and the state is 1 then the circuit is closed.
         # and vice versa for normally open
         state = GPIO.input(self.state_pin)
-        if  state == 1:
+        if  state == 0:
             return 'closed'
         else:
             return 'open'
