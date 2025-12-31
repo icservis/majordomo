@@ -15,5 +15,6 @@ class EventHook(object):
 
     def clearObjectHandlers(self, inObject):
         for theHandler in self.__handlers:
-            if theHandler.im_self == inObject:
+            # Python 3 compatible: use __self__ instead of im_self
+            if hasattr(theHandler, '__self__') and theHandler.__self__ == inObject:
                 self.removeHandler(theHandler)

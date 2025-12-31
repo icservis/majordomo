@@ -1,6 +1,9 @@
 import time
+import logging
 import RPi.GPIO as GPIO
 from lib.eventhook import EventHook
+
+logger = logging.getLogger(__name__)
 
 
 SHORT_WAIT = .2 #S (200ms)
@@ -82,12 +85,16 @@ class GarageDoor(object):
     def state(self):
         # Read the mode from the config. Then compare the mode to the current state. IE. If the circuit is normally closed and the state is 1 then the circuit is closed.
         # and vice versa for normally open
-        state = GPIO.input(self.state_pin)
-        print('State value: ' + str(state))
-        if  state == 0:
-            return 'closed'
-        else:
-            return 'open'
+        try:
+            state = GPIO.input(self.state_pin)
+            logger.debug(f'State value: {state} for door {self.id}')
+            if state == 0:
+                return 'closed'
+            else:
+                return 'open'
+        except Exception as e:
+            logger.error(f"Error reading state pin {self.state_pin}: {e}")
+            return 'unknown'
 
     # Button is a read only property that actually gets its value from the pin
     @property
