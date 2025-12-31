@@ -1,54 +1,29 @@
-cover:
-  - platform: mqtt
-    name: "Gate"
-    device_class: "gate"
-    command_topic: "homeassistant/gate/set"
-    state_topic: "homeassistant/gate/state"
-#   position_topic: "homeassistant/gate/state"
-    availability:
-      - topic: "homeassistant/gate/availability"
-    qos: 0
-    retain: true
-    payload_open: "OPEN"
-    payload_close: "CLOSE"
-    payload_stop: "STOP"
-    state_open: "open"
-    state_opening: "opening"
-    state_closed: "closed"
-    state_closing: "closing"
-    payload_available: "online"
-    payload_not_available: "offline"
-    optimistic: false
-    value_template: '{{ value }}'
-    tilt_status_topic: 'homeassistant/gate/tilt-state'
-    tilt_status_template: '{{ value_json["PWM"]["PWM1"] }}'
-    tilt_min: 0
-    tilt_max: 180
-    tilt_closed_value: 70
-    tilt_opened_value: 180
-  - platform: template
-    covers:
-      door:
-        device_class: door
-        friendly_name: "Main Door"
-        value_template: >-
-          {% if is_state('binary_sensor.main_door', 'on') %}
-            open
-          {% else %}
-            closed
-          {% endif %}
-        open_cover:
-          service: switch.turn_on
-          data:
-            entity_id: switch.door_controller
-        close_cover:
-          service: switch.turn_off
-          data:
-            entity_id: switch.door_controller
-        icon_template: >-
-          {% if is_state('binary_sensor.main_door', 'on') %}
-            mdi:door-open
-          {% else %}
-            mdi:door
-          {% endif %}
-    
+mqtt:
+  - cover:
+      name: "Gate"
+      unique_id: gate_cover
+      device_class: "gate"
+      command_topic: "homeassistant/gate/set"
+      state_topic: "homeassistant/gate/state"
+      #     position_topic: "homeassistant/gate/state"
+      availability:
+        - topic: "homeassistant/gate/availability"
+      qos: 0
+      retain: true
+      payload_open: "OPEN"
+      payload_close: "CLOSE"
+      payload_stop: "STOP"
+      state_open: "open"
+      state_opening: "opening"
+      state_closed: "closed"
+      state_closing: "closing"
+      payload_available: "online"
+      payload_not_available: "offline"
+      optimistic: false
+      value_template: "{{ value }}"
+      tilt_status_topic: "homeassistant/gate/tilt-state"
+      tilt_status_template: '{{ value_json["PWM"]["PWM1"] }}'
+      tilt_min: 0
+      tilt_max: 180
+      tilt_closed_value: 70
+      tilt_opened_value: 180

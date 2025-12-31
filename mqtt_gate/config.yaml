@@ -1,5 +1,5 @@
 mqtt:
-    host: homeassistant.local
+    host: 192.168.1.249
     port: 1883
     server_status_topic: "homeassistant/status"
     user: homeassistant

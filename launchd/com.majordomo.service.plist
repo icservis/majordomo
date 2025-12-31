@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.majordomo.service</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/python3</string>
+        <string>-u</string>
+        <string>/home/pi/Development/majordomo/mqtt_gate/main.py</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/home/pi/Development/majordomo/mqtt_gate</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/com.majordomo.service.out</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/com.majordomo.service.err</string>
+    <key>UserName</key>
+    <string>pi</string>
+</dict>
+</plist>
+
